@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+<title>jswtf</title>
+<script type="text/javascript" src="jswtf.js"></script>
+<style type="text/css">
+#letters{
+margin-bottom: 5px;
+}
+.letter{
+display: inline-block;
+width: 15px;
+height: 15px;
+padding: 10px;
+margin: 5px;
+background-color: grey;
+}
+.letter.over{
+background-color: red;
+}
+</style>
+</head>
+<body>
+
+<form>
+	<div id="letters"></div>
+	<textarea id="text" disabled="disabled"></textarea><br />
+	<input type="button" id="packB2" value="Pack Alert" /><!-- - <input type="button" id="packB1" value="Pack" /> --><br />
+	<textarea id="pack"></textarea><br />
+	<input type="button" id="test" value="Test" />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="button" id="reset" value="Clean Up" />
+</form>
+
+<script type="text/javascript">
+var text = document.getElementById('text'),
+pack = document.getElementById('pack'),
+/*packb1 = document.getElementById('packB1'),*/
+packb2 = document.getElementById('packB2'),
+test = document.getElementById('test'),
+reset = document.getElementById('reset');
+text.style.width = '100%';
+text.style.height = '300px';
+pack.style.width = '100%';
+pack.style.height = '300px';
+/*
+packb1.onclick = function()
+{
+	pack.value = JSWTF.Pack(text.value);
+}*/
+packb2.onclick = function()
+{
+	pack.value = JSWTF.PackAlert(text.value);
+}
+test.onclick = function()
+{
+	try
+	{
+		eval(pack.value);
+	}
+	catch(err)
+	{
+		alert('An error occured :-(');
+	}
+}
+reset.onclick = function()
+{
+	text.value = '';
+	pack.value = '';
+}
+
+function clickALetter(e)
+{
+	var c = (e.target.innerHTML == '&nbsp;') ? ' ' : e.target.innerHTML;
+	var trad = JSWTF.GetChar(c);
+	if(text.value == '')
+		text.value = trad;
+	else
+		text.value += '+'+trad;
+}
+
+// Yeah I know, this is bad
+function mouseoverLetter(e)
+{
+	e.target.className += ' over';
+}
+function mouseoutLetter(e)
+{
+	e.target.className = 'letter';
+}
+
+var chars = JSWTF.GetCharsList();
+var lettersDiv = document.getElementById('letters');
+for(var i = 0; i < chars.length; i++)
+{
+	var letter = document.createElement('span');
+	var c = (chars[i] == ' ') ? '&nbsp;' : chars[i];
+	letter.innerHTML = c;
+	letter.onclick = clickALetter;
+	letter.onmouseover = mouseoverLetter;
+	letter.onmouseout = mouseoutLetter;
+	letter.className = 'letter';
+	lettersDiv.appendChild(letter);
+}
+</script>
+</body>
+</html>
